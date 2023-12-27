@@ -1,27 +1,36 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from "react";
 export const Listado = () => {
+  const [listadoState, setListadoState] = useState([]);
 
-    const conseguirPeliculas = () => {
-        let peliculas = JSON.parse(localStorage.getItem("pelis"))
-        
-        console.log(peliculas)
-    }
+  useEffect(() => {
+    console.log("Componentes del listado de peliculas cargado!!");
+    conseguirPeliculas();
+  }, []);
 
-    useEffect(() =>{
-        conseguirPeliculas()
-    }, []);
+  const conseguirPeliculas = () => {
+    let peliculas = JSON.parse(localStorage.getItem("pelis"));
+    setListadoState(peliculas);
+  };
 
-    return(
-        <>
-        {/*Contenido principal*/}
-        
-            {/*Aqui van las pelis*/}
-            <article className="peli-item">
-                <h3 className="title">Desarrollo web</h3>
-                <p className="description">Alanqu Web</p>
-                <button className="edit">Editar</button>
-                <button className="delete">Eliminar</button>
-            </article>
-        </>
-    )
-}
+  return (
+    <>
+      {/*Contenido principal*/}
+
+      {/*Aqui van las pelis*/}
+      {listadoState != null ? 
+      listadoState.map((peli) => {
+        return (
+          <article key={peli.id} className="peli-item">
+            <h3 className="title">{peli.titulo}</h3>
+            <p className="description">{peli.descripcion}</p>
+            <button className="edit">Editar</button>
+            <button className="delete">Eliminar</button>
+          </article>
+        );
+      })
+
+      : <h2>No hay peliculas para mostrar</h2>
+      }
+    </>
+  );
+};
