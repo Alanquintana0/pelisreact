@@ -1,13 +1,44 @@
-import React from 'react'
+import React, { useState } from 'react'
 
-export const Buscador = () => {
+export const Buscador = ({listadoState, setListadoState}) => {
+  const [busqueda, setBusqueda] = useState('');
+  const [notFound, setNotFound] = useState(false);
+
+  const buscarPeli = (e) => {
+    //Crear estado y actualizarlo
+    setBusqueda(e.target.value)
+
+    //Filtrar para buscar coincidencias
+    let pelis_encontradas = listadoState.filter(peli => {
+      return peli.titulo.toLowerCase().includes(busqueda.toLocaleLowerCase()); 
+    });
+
+    if(busqueda.length <= 1 || pelis_encontradas <= 0){
+      pelis_encontradas = JSON.parse(localStorage.getItem("pelis"));
+      setNotFound(true)
+    }else{
+      setNotFound(false)
+    }
+
+    //Actualizar el estado del listado principal con lo filtrado
+    setListadoState(pelis_encontradas);
+  }
+
     return (
       <>
         <div className="search">
-          <h3 className="title">Buscador</h3>
+          <h3 className="title">Buscador: {busqueda}</h3>
+          {(notFound === true && busqueda.length > 1) && (
+              <span className='no-encontrado'>No se ha encontrado ninguna coincidencia</span>
+          )}
           <form>
-            <input type="text" />
-            <button>Buscar</button>
+            <input type="text" 
+                        id='search_field' 
+                        name='busqueda'
+                        autoComplete='off'
+                        value={busqueda}
+                        onChange={buscarPeli}/>
+            <button id='search'>Buscar</button>
           </form>
         </div>
       </>

@@ -35,7 +35,7 @@ function App() {
         {/*Barra lateral*/}
         <aside className="lateral">
             {/*Buscar pelicula*/}
-            <Buscador/>
+            <Buscador listadoState={listadoState} setListadoState={setListadoState}/>
 
             {/*Anadir pelicula*/}
             <Agregar setListadoState={setListadoState}/>
