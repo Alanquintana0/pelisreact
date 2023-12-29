@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
-export const Listado = () => {
-  const [listadoState, setListadoState] = useState([]);
+export const Listado = ({listadoState, setListadoState}) => {
+  //const [listadoState, setListadoState] = useState([]);
 
   useEffect(() => {
     console.log("Componentes del listado de peliculas cargado!!");
@@ -10,7 +10,23 @@ export const Listado = () => {
   const conseguirPeliculas = () => {
     let peliculas = JSON.parse(localStorage.getItem("pelis"));
     setListadoState(peliculas);
+    return peliculas;
   };
+
+  const borrarPeli = (id) => {
+    //Conseguir peliculas almacenadas
+    let pelis_almacenadas = conseguirPeliculas();
+
+    //Filtrar para que elimine del arreglo la peli que ya no quiero
+    let nuevoArrayPelis = pelis_almacenadas.filter(peli => peli.id !== parseInt(id))
+
+    //Actualizar los datos en el localStorage
+    setListadoState(nuevoArrayPelis);
+
+    //Actualizar estado del listado
+    localStorage.setItem('pelis', JSON.stringify(nuevoArrayPelis));
+    alert("Elemento eliminado")
+  }
 
   return (
     <>
@@ -24,7 +40,7 @@ export const Listado = () => {
             <h3 className="title">{peli.titulo}</h3>
             <p className="description">{peli.descripcion}</p>
             <button className="edit">Editar</button>
-            <button className="delete">Eliminar</button>
+            <button className="delete" onClick={ () => borrarPeli(peli.id) }>Eliminar</button>
           </article>
         );
       })
